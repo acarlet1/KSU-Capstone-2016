@@ -6,6 +6,10 @@
           <option name="url" value="https://github.com/acarlet1/KSU-Capstone-2016.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/akenyon2/VolleyExample.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="C:\Users\Josh\Desktop\School\Capstone" />
