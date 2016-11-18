@@ -263,11 +263,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
- /*   private void makeStringReq() {
+    private void makeStringReq(String ans) throws Exception{
         showProgressDialog();
         EditText mEdit;
 
         // Added by Josh
+        /*
         mEdit = (EditText) findViewById(R.id.item_query);
         String tempText = mEdit.getText().toString();
         StringBuilder finaltxtBuilder = new StringBuilder();
@@ -279,14 +280,18 @@ public class MainActivity extends AppCompatActivity {
                 textChars[i] = '+';
                 finaltxtBuilder.setCharAt(i, textChars[i]);
             }
-        String finalStr = finaltxtBuilder.toString();
 
+        String finalStr = finaltxtBuilder.toString();
+*/
+        //System.out.println("searching for " + ans);
         StringRequest strReq = new StringRequest(Method.GET,
                 "http://api.walmartlabs.com/v1/search?apiKey=52pcepcteuhhwx7gtg5z7dbe&query="
-                        + finalStr.toString(), new Response.Listener<String>() {
+                        + ans, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
+                //System.out.println("response = " + response);
+
                 //Log.d(TAG, response.toString());
                 result = response;
                 int a = result.indexOf("salePrice");
@@ -294,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
                 String finalResult;
                 finalResult = result.substring(a + 11, b - 2);
                 System.out.println("final result = " + finalResult);
-                msgResponse.setText(response.toString());
+                //msgResponse.setText(response);
                 hideProgressDialog();
             }
         }, new Response.ErrorListener() {
@@ -306,9 +311,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // Adding request to request queue
-        // AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
-*/
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -364,7 +369,15 @@ public class MainActivity extends AppCompatActivity {
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    // adds item user wishes to add to masterItems
                     masterItems.add(preferredCase(input.getText().toString()));
+                    //System.out.println("user adds " + input.getText().toString());
+                    try {
+                        makeStringReq(input.getText().toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     Collections.sort(masterItems);
                     storeArrayVal(masterItems, getApplicationContext());
                     lv.setAdapter(adapter);
