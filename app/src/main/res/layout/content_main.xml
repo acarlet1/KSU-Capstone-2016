@@ -12,6 +12,7 @@
     tools:context="com.ksucapstone2016.myfoodstuff.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <!--these need to be moved. kept here for testing -->
     <EditText
         android:id="@+id/item_query"
         android:layout_width="wrap_content"
@@ -40,5 +41,6 @@
         android:id="@+id/listView"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        />
 </LinearLayout>
