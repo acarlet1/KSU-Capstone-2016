@@ -320,8 +320,7 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         //^changing this to put the value into a variable
-
-
+        
         //MenuInflater inflater = getMenuInflater();
         //inflater.inflate(R.menu.menu_main, menu);
 
