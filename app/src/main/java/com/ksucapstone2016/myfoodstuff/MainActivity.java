@@ -2,6 +2,7 @@ package com.ksucapstone2016.myfoodstuff;
 
 import android.app.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 //import android.net.Uri;
@@ -10,7 +11,9 @@ import android.os.Bundle;
 
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuInflater;
 import android.view.View;
@@ -18,6 +21,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.app.usage.UsageEvents;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.view.View.OnKeyListener;
+
+import com.android.volley.Request.Method;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
 
 import java.util.ArrayList;
 //import java.util.Arrays;
@@ -33,7 +53,6 @@ import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.TextView;
 /*import android.view.View;
-
 import android.view.Menu;
 import android.view.MenuItem;*/
 import android.view.MotionEvent;
@@ -42,6 +61,8 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import android.app.SearchManager;
+import android.widget.SearchView.OnQueryTextListener;
 /*import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -70,6 +91,15 @@ public class MainActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
 
+    private String TAG = MainActivity.class.getSimpleName();
+    private EditText btnStringReq;
+    private TextView msgResponse;
+    private ProgressDialog pDialog;
+    private String result;
+
+    // This tag will be used to cancel the request
+    private String tag_string_req = "string_req";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +109,84 @@ public class MainActivity extends AppCompatActivity {
 
 
         masterItems = getArrayVal(getApplicationContext());
+
+        btnStringReq = (EditText) findViewById(R.id.item_query);
+
+        msgResponse = (TextView) findViewById(R.id.msgResponse);
+
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
+
+        btnStringReq.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == keyEvent.KEYCODE_ENTER) {
+                    makeStringReq();
+                }
+                return true;
+            }
+        });
+    };
+
+    private void showProgressDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (pDialog.isShowing())
+            pDialog.hide();
+    }
+
+    private void makeStringReq() {
+        showProgressDialog();
+        EditText mEdit;
+
+
+
+        // Added by Josh
+        mEdit = (EditText) findViewById(R.id.item_query);
+        String tempText = mEdit.getText().toString();
+        StringBuilder finaltxtBuilder = new StringBuilder();
+        finaltxtBuilder.append(tempText);
+        char[] textChars = tempText.toCharArray();
+        String spacetxt = " ";
+        for (int i = 0; i < tempText.length(); i++)
+            if (tempText.charAt(i) == spacetxt.charAt(0)) {
+                textChars[i] = '+';
+                finaltxtBuilder.setCharAt(i, textChars[i]);
+            }
+        String finalStr = finaltxtBuilder.toString();
+
+        StringRequest strReq = new StringRequest(Method.GET,
+                "http://api.walmartlabs.com/v1/search?apiKey=52pcepcteuhhwx7gtg5z7dbe&query="
+                        + finalStr.toString(), new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                //Log.d(TAG, response.toString());
+                result = response;
+                int a = result.indexOf("salePrice");
+                int b = result.indexOf("upc");
+                String finalResult;
+                finalResult = result.substring(a + 11, b - 2);
+                System.out.println("final result = " + finalResult);
+                msgResponse.setText(response.toString());
+                hideProgressDialog();
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                hideProgressDialog();
+            }
+        });
+        // Adding request to request queue
+        // AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+
 
 
         // Added by Aaron
@@ -246,7 +354,11 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_add) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Add Item");
-            final EditText input = new EditText(this);
+
+
+
+
+           /* final EditText input = new EditText(this);
             builder.setView(input);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
@@ -265,7 +377,11 @@ public class MainActivity extends AppCompatActivity {
             });
             builder.show();
             return true;
+        */
+
         }
+
+
         if (id == R.id.action_clear) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Clear Entire List");
