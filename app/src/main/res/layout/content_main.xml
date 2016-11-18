@@ -13,6 +13,7 @@
     tools:showIn="@layout/activity_main">
 
     <!--these need to be moved. kept here for testing -->
+<!--
     <EditText
         android:id="@+id/item_query"
         android:layout_width="wrap_content"
@@ -33,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:text="" />
+        android:text="" /> -->
 
     <ListView
         android:layout_width="wrap_content"

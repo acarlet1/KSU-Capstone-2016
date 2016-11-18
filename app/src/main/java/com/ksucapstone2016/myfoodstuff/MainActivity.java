@@ -120,15 +120,15 @@ public class MainActivity extends AppCompatActivity {
 
         masterItems = getArrayVal(getApplicationContext());
 
-        btnStringReq = (EditText) findViewById(R.id.item_query);
+        //btnStringReq = (EditText) findViewById(R.id.item_query);
 
-        msgResponse = (TextView) findViewById(R.id.msgResponse);
+        //msgResponse = (TextView) findViewById(R.id.msgResponse);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(false);
 
-        btnStringReq.setOnKeyListener(new View.OnKeyListener() {
+     /*   btnStringReq.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (keyEvent.getKeyCode() == keyEvent.KEYCODE_ENTER) {
@@ -136,8 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
-        });
-
+        });*/
 
         // Adding request to request queue
         // AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
@@ -159,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
         // can comment out all the adds
         // but DO NOT REMOVE THEM ~~~Aaron
-        masterItems.add("Eggs");
+     /*   masterItems.add("Eggs");
         // get price for eggs from Walmart API
         WalmartPrices.add((float) 2.50);
         // get price for eggs from Target API
@@ -235,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         System.out.printf("Multiple store total: $" + "%1.2f", bestTotal);
-        // End Add by Aaron
+        // End Add by Aaron*/
 
         Collections.sort(masterItems);
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, masterItems);
@@ -264,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void makeStringReq() {
+ /*   private void makeStringReq() {
         showProgressDialog();
         EditText mEdit;
 
@@ -309,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
         // Adding request to request queue
         // AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
-
+*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -419,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences WordSearchPutPrefs = context.getSharedPreferences("dbArrayValues", Activity.MODE_PRIVATE);
         SharedPreferences.Editor prefEditor = WordSearchPutPrefs.edit();
         prefEditor.putStringSet("myArray", WhatToWrite);
-        prefEditor.commit();
+        prefEditor.apply();
     }
 
     public static ArrayList getArrayVal(Context dan) {
