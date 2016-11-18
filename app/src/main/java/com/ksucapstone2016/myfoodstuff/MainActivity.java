@@ -42,6 +42,7 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.ArrayList;
 //import java.util.Arrays;
 import java.util.Collections;
+import java.text.DecimalFormat;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -298,8 +299,13 @@ public class MainActivity extends AppCompatActivity {
                 int b = result.indexOf("upc");
                 String finalResult;
                 finalResult = result.substring(a + 11, b - 2);
-                System.out.println("final result = " + finalResult);
+                //System.out.println("final result = " + finalResult);
                 //msgResponse.setText(response);
+                float finalResultFloat = Float.parseFloat(finalResult);
+                DecimalFormat f = new DecimalFormat("##.00");
+                System.out.println("Walmart Price = " + f.format(finalResultFloat));
+                WalmartPrices.add(finalResultFloat);
+                System.out.println(WalmartPrices);
                 hideProgressDialog();
             }
         }, new Response.ErrorListener() {
@@ -320,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         //^changing this to put the value into a variable
-        
+
         //MenuInflater inflater = getMenuInflater();
         //inflater.inflate(R.menu.menu_main, menu);
 
