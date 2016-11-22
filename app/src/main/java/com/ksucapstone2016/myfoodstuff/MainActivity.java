@@ -79,13 +79,19 @@ import com.google.android.gms.common.api.GoogleApiClient;
 public class MainActivity extends AppCompatActivity {
     //ArrayList<String> shoppingList = null; shopping list ---> masterItems
     ArrayAdapter<String> adapter = null;
+    ArrayAdapter<Double> adapter2 = null;
     ListView lv = null;
+    ListView lv2 = null;
     ArrayList<String> masterItems = new ArrayList<String>();
+    ArrayList<Double> w_prices = new ArrayList<Double>();
     ArrayList<Float> WalmartPrices = new ArrayList<Float>();
     ArrayList<Float> TargetPrices = new ArrayList<Float>();
     ArrayList<Float> bestPrices = new ArrayList<Float>();
     ArrayList<String> bestList = new ArrayList<String>();
 
+    String priceNum = null;
+    Double PRICE = 0.00;
+    Double TOTAL = 0.00;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -129,118 +135,14 @@ public class MainActivity extends AppCompatActivity {
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(false);
 
-     /*   btnStringReq.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (keyEvent.getKeyCode() == keyEvent.KEYCODE_ENTER) {
-                    makeStringReq();
-                }
-                return true;
-            }
-        });*/
 
-        // Adding request to request queue
-        // AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-
-
-        // Added by Aaron
-
-        // example prices (currently hard-coded):
-        // Walmart:
-        // eggs 2.50
-        // milk 4.00
-        // cheese 2.25
-        // bread 3.00
-        // Target:
-        // eggs 2.75
-        // milk 4.00
-        // cheese 2.50
-        // bread 2.75
-
-        // can comment out all the adds
-        // but DO NOT REMOVE THEM ~~~Aaron
-     /*   masterItems.add("Eggs");
-        // get price for eggs from Walmart API
-        WalmartPrices.add((float) 2.50);
-        // get price for eggs from Target API
-        TargetPrices.add((float) 2.75);
-
-        masterItems.add("Milk");
-        // get price for milk from Walmart API
-        WalmartPrices.add((float) 4.00);
-        // get price for milk from Target API
-        TargetPrices.add((float) 4.00);
-
-        masterItems.add("Cheese");
-        // get price for cheese from Walmart API
-        WalmartPrices.add((float) 2.25);
-        // get price for cheese from Target API
-        TargetPrices.add((float) 2.50);
-
-        masterItems.add("Bread");
-        // get price for bread from Walmart API
-        WalmartPrices.add((float) 3.00);
-        // get price for bread from Target API
-        TargetPrices.add((float) 2.75);
-
-        Double WalmartTotal = 0.00;
-        Double TargetTotal = 0.00;
-        Double bestTotal = 0.00;
-        Integer largestList = null;
-
-        if (WalmartPrices.size() > TargetPrices.size())
-            largestList = WalmartPrices.size();
-        else
-            largestList = TargetPrices.size();
-
-        // Walmart stuff
-        for (Integer i = 0; i < WalmartPrices.size(); ++i) {
-            WalmartTotal += WalmartPrices.get(i);
-            System.out.printf("Walmart " + masterItems.get(i) + " = $" + "%1.2f", WalmartPrices.get(i));
-            System.out.println();
-        }
-
-        System.out.printf("One trip to Walmart Total: $" + "%1.2f", WalmartTotal);
-        System.out.println();
-        System.out.println();
-
-        // Target stuff
-        for (Integer i = 0; i < TargetPrices.size(); ++i) {
-            TargetTotal += TargetPrices.get(i);
-            System.out.printf("Target " + masterItems.get(i) + " = $" + "%1.2f", TargetPrices.get(i));
-            System.out.println();
-        }
-
-        System.out.printf("One trip to Target Total: $" + "%1.2f", TargetTotal);
-        System.out.println();
-        System.out.println();
-
-        for (Integer i = 0; i < largestList; ++i) {
-            if (WalmartPrices.get(i) <= TargetPrices.get(i)) {
-                bestPrices.add((float) WalmartPrices.get(i));
-                bestTotal += WalmartPrices.get(i);
-                bestList.add("Walmart");
-            } else {
-                bestPrices.add((float) TargetPrices.get(i));
-                bestTotal += TargetPrices.get(i);
-                bestList.add("Target");
-            }
-        }
-        System.out.println();
-        System.out.println("Best prices for a multiple store trip:");
-
-        for (Integer i = 0; i < bestPrices.size(); ++i) {
-            System.out.printf(bestList.get(i) + " " + masterItems.get(i) + ": $" + "%1.2f", bestPrices.get(i));
-            System.out.println();
-        }
-
-        System.out.printf("Multiple store total: $" + "%1.2f", bestTotal);
-        // End Add by Aaron*/
-
-        Collections.sort(masterItems);
+        //Collections.sort(masterItems);
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, masterItems);
+        adapter2 = new ArrayAdapter<Double>(this, android.R.layout.simple_list_item_1, w_prices);
         lv = (ListView) findViewById(R.id.listView);
         lv.setAdapter(adapter);
+        lv2 = (ListView) findViewById(R.id.wPrice);
+        lv2.setAdapter(adapter2);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View view, final int position, long id) {
@@ -268,22 +170,6 @@ public class MainActivity extends AppCompatActivity {
         showProgressDialog();
         EditText mEdit;
 
-        // Added by Josh
-        /*
-        mEdit = (EditText) findViewById(R.id.item_query);
-        String tempText = mEdit.getText().toString();
-        StringBuilder finaltxtBuilder = new StringBuilder();
-        finaltxtBuilder.append(tempText);
-        char[] textChars = tempText.toCharArray();
-        String spacetxt = " ";
-        for (int i = 0; i < tempText.length(); i++)
-            if (tempText.charAt(i) == spacetxt.charAt(0)) {
-                textChars[i] = '+';
-                finaltxtBuilder.setCharAt(i, textChars[i]);
-            }
-
-        String finalStr = finaltxtBuilder.toString();
-*/
         //System.out.println("searching for " + ans);
         StringRequest strReq = new StringRequest(Method.GET,
                 "http://api.walmartlabs.com/v1/search?apiKey=52pcepcteuhhwx7gtg5z7dbe&query="
@@ -299,9 +185,11 @@ public class MainActivity extends AppCompatActivity {
                 int b = result.indexOf("upc");
                 String finalResult;
                 finalResult = result.substring(a + 11, b - 2);
+
                 //System.out.println("final result = " + finalResult);
                 //msgResponse.setText(response);
                 float finalResultFloat = Float.parseFloat(finalResult);
+                PRICE = Double.parseDouble(finalResult);
                 DecimalFormat f = new DecimalFormat("##.00");
                 System.out.println("Walmart Price = " + f.format(finalResultFloat));
                 WalmartPrices.add(finalResultFloat);
@@ -366,16 +254,16 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Add Item");
 
-
-
-
            final EditText input = new EditText(this);
             builder.setView(input);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+
                     // adds item user wishes to add to masterItems
+                    //masterItems.add(preferredCase(input.getText().toString()) + " $" + priceNum);
                     masterItems.add(preferredCase(input.getText().toString()));
+                    w_prices.add(PRICE);
                     //System.out.println("user adds " + input.getText().toString());
                     try {
                         makeStringReq(input.getText().toString());
@@ -383,9 +271,10 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    Collections.sort(masterItems);
+                    //Collections.sort(masterItems);
                     storeArrayVal(masterItems, getApplicationContext());
                     lv.setAdapter(adapter);
+                    lv2.setAdapter(adapter2);
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -400,7 +289,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
         if (id == R.id.action_clear) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Clear Entire List");
@@ -408,7 +296,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     masterItems.clear();
+                    w_prices.clear();
                     lv.setAdapter(adapter);
+                    lv2.setAdapter(adapter2);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -419,6 +309,15 @@ public class MainActivity extends AppCompatActivity {
             });
             builder.show();
             return true;
+        }
+
+        if (id == R.id.total_price) {
+            TOTAL = 0.00;
+            getTotal();
+            masterItems.add("Total: ");
+            w_prices.add(TOTAL);
+            lv.setAdapter(adapter);
+            lv2.setAdapter(adapter2);
         }
 
         return super.onOptionsItemSelected(item);
@@ -454,9 +353,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 masterItems.remove(position);
-                Collections.sort(masterItems);
+                w_prices.remove(position);
+                //Collections.sort(masterItems);
                 storeArrayVal(masterItems, getApplicationContext());
                 lv.setAdapter(adapter);
+                lv2.setAdapter(adapter2);
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -466,6 +367,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    public void getTotal(){
+        for(int i = 0; i < w_prices.size(); i++){
+            TOTAL += w_prices.get(i);
+        }
     }
 //ToDO: Long hold for menu option
 
@@ -557,3 +464,132 @@ public class MainActivity extends AppCompatActivity {
                 .build();
     }
 }
+
+
+//-----------------------------------------------------------------------------------
+
+     /*   btnStringReq.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == keyEvent.KEYCODE_ENTER) {
+                    makeStringReq();
+                }
+                return true;
+            }
+        });*/
+
+// Adding request to request queue
+// AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+
+// Added by Aaron
+
+// example prices (currently hard-coded):
+// Walmart:
+// eggs 2.50
+// milk 4.00
+// cheese 2.25
+// bread 3.00
+// Target:
+// eggs 2.75
+// milk 4.00
+// cheese 2.50
+// bread 2.75
+
+// can comment out all the adds
+// but DO NOT REMOVE THEM ~~~Aaron
+     /*   masterItems.add("Eggs");
+        // get price for eggs from Walmart API
+        WalmartPrices.add((float) 2.50);
+        // get price for eggs from Target API
+        TargetPrices.add((float) 2.75);
+
+        masterItems.add("Milk");
+        // get price for milk from Walmart API
+        WalmartPrices.add((float) 4.00);
+        // get price for milk from Target API
+        TargetPrices.add((float) 4.00);
+
+        masterItems.add("Cheese");
+        // get price for cheese from Walmart API
+        WalmartPrices.add((float) 2.25);
+        // get price for cheese from Target API
+        TargetPrices.add((float) 2.50);
+
+        masterItems.add("Bread");
+        // get price for bread from Walmart API
+        WalmartPrices.add((float) 3.00);
+        // get price for bread from Target API
+        TargetPrices.add((float) 2.75);
+
+        Double WalmartTotal = 0.00;
+        Double TargetTotal = 0.00;
+        Double bestTotal = 0.00;
+        Integer largestList = null;
+
+        if (WalmartPrices.size() > TargetPrices.size())
+            largestList = WalmartPrices.size();
+        else
+            largestList = TargetPrices.size();
+
+        // Walmart stuff
+        for (Integer i = 0; i < WalmartPrices.size(); ++i) {
+            WalmartTotal += WalmartPrices.get(i);
+            System.out.printf("Walmart " + masterItems.get(i) + " = $" + "%1.2f", WalmartPrices.get(i));
+            System.out.println();
+        }
+
+        System.out.printf("One trip to Walmart Total: $" + "%1.2f", WalmartTotal);
+        System.out.println();
+        System.out.println();
+
+        // Target stuff
+        for (Integer i = 0; i < TargetPrices.size(); ++i) {
+            TargetTotal += TargetPrices.get(i);
+            System.out.printf("Target " + masterItems.get(i) + " = $" + "%1.2f", TargetPrices.get(i));
+            System.out.println();
+        }
+
+        System.out.printf("One trip to Target Total: $" + "%1.2f", TargetTotal);
+        System.out.println();
+        System.out.println();
+
+        for (Integer i = 0; i < largestList; ++i) {
+            if (WalmartPrices.get(i) <= TargetPrices.get(i)) {
+                bestPrices.add((float) WalmartPrices.get(i));
+                bestTotal += WalmartPrices.get(i);
+                bestList.add("Walmart");
+            } else {
+                bestPrices.add((float) TargetPrices.get(i));
+                bestTotal += TargetPrices.get(i);
+                bestList.add("Target");
+            }
+        }
+        System.out.println();
+        System.out.println("Best prices for a multiple store trip:");
+
+        for (Integer i = 0; i < bestPrices.size(); ++i) {
+            System.out.printf(bestList.get(i) + " " + masterItems.get(i) + ": $" + "%1.2f", bestPrices.get(i));
+            System.out.println();
+        }
+
+        System.out.printf("Multiple store total: $" + "%1.2f", bestTotal);
+        // End Add by Aaron*/
+//-----------------------------------------------------------------------------------------
+
+// Added by Josh
+        /*
+        mEdit = (EditText) findViewById(R.id.item_query);
+        String tempText = mEdit.getText().toString();
+        StringBuilder finaltxtBuilder = new StringBuilder();
+        finaltxtBuilder.append(tempText);
+        char[] textChars = tempText.toCharArray();
+        String spacetxt = " ";
+        for (int i = 0; i < tempText.length(); i++)
+            if (tempText.charAt(i) == spacetxt.charAt(0)) {
+                textChars[i] = '+';
+                finaltxtBuilder.setCharAt(i, textChars[i]);
+            }
+
+        String finalStr = finaltxtBuilder.toString();
+*/

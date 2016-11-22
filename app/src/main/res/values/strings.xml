@@ -4,5 +4,6 @@
     <string name="action_sort">Sort List</string>
     <string name="action_add">Add Item</string>
     <string name="action_clear">Clear</string>
+    <string name="total_price">Total Price</string>
 
 </resources>
