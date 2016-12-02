@@ -203,6 +203,14 @@ public class MainActivity extends AppCompatActivity {
                 DecimalFormat f = new DecimalFormat("##.00");
                 System.out.println("Walmart Price = " + f.format(finalResultFloat));
                 WalmartPrices.add(finalResultFloat);
+
+                lv3.setAdapter(adapter3);
+
+
+                w_prices.add(PRICE);
+                w_priceString.add(f.format(PRICE));
+                System.out.println("Testing prices string: " + w_priceString);
+
                 System.out.println(WalmartPrices);
                 hideProgressDialog();
             }
@@ -274,19 +282,19 @@ public class MainActivity extends AppCompatActivity {
                     //masterItems.add(preferredCase(input.getText().toString()) + " $" + priceNum);
                     masterItems.add(preferredCase(input.getText().toString()));
                     NumberFormat f = new DecimalFormat("#0.00");
-                    w_prices.add(PRICE);
-                    w_priceString.add(f.format(PRICE));
-                    System.out.println("Testing prices string: " + w_priceString);
-                    //System.out.println("user adds " + input.getText().toString());
+                    System.out.println("User wants: " + input.getText().toString());
                     try {
                         makeStringReq(input.getText().toString());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
+                    //System.out.println("user adds " + input.getText().toString());
+
+
                     //Collections.sort(masterItems);
                     storeArrayVal(masterItems, getApplicationContext());
-                    
+
                     lv.setAdapter(adapter);
                     //lv2.setAdapter(adapter2);
                     lv3.setAdapter(adapter3);
@@ -504,101 +512,6 @@ public class MainActivity extends AppCompatActivity {
 // Adding request to request queue
 // AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
-
-// Added by Aaron
-
-// example prices (currently hard-coded):
-// Walmart:
-// eggs 2.50
-// milk 4.00
-// cheese 2.25
-// bread 3.00
-// Target:
-// eggs 2.75
-// milk 4.00
-// cheese 2.50
-// bread 2.75
-
-// can comment out all the adds
-// but DO NOT REMOVE THEM ~~~Aaron
-     /*   masterItems.add("Eggs");
-        // get price for eggs from Walmart API
-        WalmartPrices.add((float) 2.50);
-        // get price for eggs from Target API
-        TargetPrices.add((float) 2.75);
-
-        masterItems.add("Milk");
-        // get price for milk from Walmart API
-        WalmartPrices.add((float) 4.00);
-        // get price for milk from Target API
-        TargetPrices.add((float) 4.00);
-
-        masterItems.add("Cheese");
-        // get price for cheese from Walmart API
-        WalmartPrices.add((float) 2.25);
-        // get price for cheese from Target API
-        TargetPrices.add((float) 2.50);
-
-        masterItems.add("Bread");
-        // get price for bread from Walmart API
-        WalmartPrices.add((float) 3.00);
-        // get price for bread from Target API
-        TargetPrices.add((float) 2.75);
-
-        Double WalmartTotal = 0.00;
-        Double TargetTotal = 0.00;
-        Double bestTotal = 0.00;
-        Integer largestList = null;
-
-        if (WalmartPrices.size() > TargetPrices.size())
-            largestList = WalmartPrices.size();
-        else
-            largestList = TargetPrices.size();
-
-        // Walmart stuff
-        for (Integer i = 0; i < WalmartPrices.size(); ++i) {
-            WalmartTotal += WalmartPrices.get(i);
-            System.out.printf("Walmart " + masterItems.get(i) + " = $" + "%1.2f", WalmartPrices.get(i));
-            System.out.println();
-        }
-
-        System.out.printf("One trip to Walmart Total: $" + "%1.2f", WalmartTotal);
-        System.out.println();
-        System.out.println();
-
-        // Target stuff
-        for (Integer i = 0; i < TargetPrices.size(); ++i) {
-            TargetTotal += TargetPrices.get(i);
-            System.out.printf("Target " + masterItems.get(i) + " = $" + "%1.2f", TargetPrices.get(i));
-            System.out.println();
-        }
-
-        System.out.printf("One trip to Target Total: $" + "%1.2f", TargetTotal);
-        System.out.println();
-        System.out.println();
-
-        for (Integer i = 0; i < largestList; ++i) {
-            if (WalmartPrices.get(i) <= TargetPrices.get(i)) {
-                bestPrices.add((float) WalmartPrices.get(i));
-                bestTotal += WalmartPrices.get(i);
-                bestList.add("Walmart");
-            } else {
-                bestPrices.add((float) TargetPrices.get(i));
-                bestTotal += TargetPrices.get(i);
-                bestList.add("Target");
-            }
-        }
-        System.out.println();
-        System.out.println("Best prices for a multiple store trip:");
-
-        for (Integer i = 0; i < bestPrices.size(); ++i) {
-            System.out.printf(bestList.get(i) + " " + masterItems.get(i) + ": $" + "%1.2f", bestPrices.get(i));
-            System.out.println();
-        }
-
-        System.out.printf("Multiple store total: $" + "%1.2f", bestTotal);
-        // End Add by Aaron*/
-//-----------------------------------------------------------------------------------------
 
 // Added by Josh
         /*
