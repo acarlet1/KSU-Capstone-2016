@@ -30,6 +30,12 @@
         android:title="Total Price"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/amazon_price"
+        android:orderInCategory="300"
+        android:title="Amazon Price"
+        app:showAsAction="never" />
+
     <item android:id="@+id/action_add"
         android:icon="@drawable/ic_add_circle_outline_white_48dp"
         android:title="@string/action_add"
