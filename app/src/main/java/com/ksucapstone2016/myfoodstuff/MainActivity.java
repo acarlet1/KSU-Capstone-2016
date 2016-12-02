@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //Collections.sort(masterItems);
                     storeArrayVal(masterItems, getApplicationContext());
-                    storeArrayVal(w_priceString, getApplicationContext());
+                    
                     lv.setAdapter(adapter);
                     //lv2.setAdapter(adapter2);
                     lv3.setAdapter(adapter3);
