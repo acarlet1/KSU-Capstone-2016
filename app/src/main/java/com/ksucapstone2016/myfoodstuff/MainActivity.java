@@ -90,11 +90,14 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> masterItems = new ArrayList<String>();
     ArrayList<Double> w_prices = new ArrayList<Double>();
     ArrayList<String> w_priceString = new ArrayList<>();
+    ArrayList<String> w_priceStringTmp = new ArrayList<>();
     ArrayList<Double> a_prices = new ArrayList<Double>();
     ArrayList<Float> WalmartPrices = new ArrayList<Float>();
     ArrayList<Float> TargetPrices = new ArrayList<Float>();
     ArrayList<Float> bestPrices = new ArrayList<Float>();
     ArrayList<String> bestList = new ArrayList<String>();
+
+
 
     //String priceNum = null;
     Double PRICE = 0.00;
@@ -147,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, masterItems);
         adapter2 = new ArrayAdapter<Double>(this, android.R.layout.simple_list_item_1, w_prices);
         adapter3 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, w_priceString);
+
         lv = (ListView) findViewById(R.id.listView);
         lv.setAdapter(adapter);
         //lv2 = (ListView) findViewById(R.id.wPrice);
@@ -176,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void makeStringReq(String ans) throws Exception{
+    private void makeStringReq(final String ans) throws Exception{
         showProgressDialog();
         EditText mEdit;
 
@@ -206,12 +210,11 @@ public class MainActivity extends AppCompatActivity {
 
                 lv3.setAdapter(adapter3);
 
-
                 w_prices.add(PRICE);
                 w_priceString.add(f.format(PRICE));
                 System.out.println("Testing prices string: " + w_priceString);
-
-                System.out.println(WalmartPrices);
+                w_priceStringTmp.add(f.format(PRICE));
+                System.out.println("Master walmart prices: " + WalmartPrices);
                 hideProgressDialog();
             }
         }, new Response.ErrorListener() {
@@ -241,6 +244,8 @@ public class MainActivity extends AppCompatActivity {
         SearchView searchView = (SearchView)item.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -250,8 +255,57 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 adapter.getFilter().filter(newText);
 
+                // added by Aaron
+                // find index where newText is found in master items
+                // and display w_prices[index] on the adapter3
+
+                boolean exit = false;
+                System.out.println(w_priceString);
+                System.out.println(masterItems);
+
+                int i = 0;
+                ArrayList<Integer> tmpList = new ArrayList<Integer>();
+
+                for(i = 0; i < masterItems.size(); i++){
+                    if (masterItems.get(i).contains(newText)) {
+                        for(int j = 0; j < tmpList.size() && !exit; j++){
+                            for (int k = 0; k < w_priceString.size(); k++){
+                                if (!(tmpList.isEmpty()) && w_priceString.get(tmpList.get(j)).equals(w_priceString.get(k))) {
+                                    adapter3.remove(w_priceString.get(k));
+                                    exit = true;
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        tmpList.add(i);
+                    }
+                }
                 return false;
             }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+
+
+
+            @Override
+            public boolean onClose() {
+                System.out.println("Closed search..");
+                adapter3.clear();
+                adapter.clear();
+                for (int i = 0; i < w_priceStringTmp.size(); i++){
+                    adapter3.add(w_priceStringTmp.get(i));
+                    adapter.add(masterItems.get(i));
+                }
+                lv3.setAdapter(adapter3);
+
+                return false;
+            }
+
+
+
+
         });
 
 
@@ -345,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
             NumberFormat f = new DecimalFormat("#0.00");
             w_priceString.add(f.format(TOTAL));
             lv.setAdapter(adapter);
-            //lv2.setAdapter(adapter2);
+            // Aaron
             lv3.setAdapter(adapter3);
         }
 
