@@ -343,9 +343,6 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    //System.out.println("user adds " + input.getText().toString());
-
-
                     //Collections.sort(masterItems);
                     storeArrayVal(masterItems, getApplicationContext());
 
