@@ -47,6 +47,8 @@ import java.text.DecimalFormat;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+
 import android.app.AlertDialog;
 import android.widget.EditText;
 import android.content.DialogInterface;
@@ -77,7 +79,7 @@ import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     //ArrayList<String> shoppingList = null; shopping list ---> masterItems
     ArrayAdapter<String> adapter = null;
     ArrayAdapter<Double> adapter2 = null;
@@ -96,11 +98,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Double> a_prices = new ArrayList<Double>();
     ArrayList<String> a_priceString = new ArrayList<String>();
     ArrayList<Float> WalmartPrices = new ArrayList<Float>();
-    ArrayList<Float> TargetPrices = new ArrayList<Float>();
-    ArrayList<Float> bestPrices = new ArrayList<Float>();
-    ArrayList<String> bestList = new ArrayList<String>();
-
-
 
     //String priceNum = null;
     Double PRICE = 0.00;
@@ -193,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
     private void makeStringReq(final String ans) throws Exception{
         showProgressDialog();
         EditText mEdit;
+        //msgResponse = (TextView) findViewById(R.id.msgResponse);
 
         //System.out.println("searching for " + ans);
         StringRequest strReq = new StringRequest(Method.GET,
@@ -226,6 +224,30 @@ public class MainActivity extends AppCompatActivity {
                 w_priceStringTmp.add(f.format(PRICE));
                 System.out.println("Master walmart prices: " + WalmartPrices);
                 hideProgressDialog();
+
+
+
+                // Amazon Prices
+                String toSearch = ans;
+                MyTask myTask = null;
+                try {
+                    myTask = new MyTask(MainActivity.this, lv4, adapter4, ans);
+                    //msgResponse text = (msgResponse)findViewById(R.id.msgResponse);
+                    //System.out.println("request html: " + msgResponse.getText().toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    myTask.execute().get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("response in main: " + myTask.server_response);
+                String amz = myTask.server_response;
+                adapter4.add(amz);
+                lv4.setAdapter(adapter4);
             }
         }, new Response.ErrorListener() {
 
@@ -235,11 +257,14 @@ public class MainActivity extends AppCompatActivity {
                 hideProgressDialog();
             }
         });
+
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-
+    public void asyncComplete (boolean success) {
+        adapter4.notifyDataSetChanged();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -347,8 +372,8 @@ public class MainActivity extends AppCompatActivity {
                     // adds item user wishes to add to masterItems
                     //masterItems.add(preferredCase(input.getText().toString()) + " $" + priceNum);
                     masterItems.add(preferredCase(input.getText().toString()));
-                    a_prices.add(2.5);
-                    a_priceString.add("2.5");
+                    //a_prices.add(2.5);
+                    //a_priceString.add("2.5");
                     NumberFormat f = new DecimalFormat("#0.00");
                     System.out.println("User wants: " + input.getText().toString());
                     try {
@@ -357,7 +382,6 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    //Collections.sort(masterItems);
                     storeArrayVal(masterItems, getApplicationContext());
 
                     lv.setAdapter(adapter);
