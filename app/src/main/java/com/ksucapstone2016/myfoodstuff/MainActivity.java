@@ -165,6 +165,18 @@ public class MainActivity extends AppCompatActivity{
         lv4 = (ListView) findViewById(R.id.aPrice);
         lv4.setAdapter(adapter4);
 
+        // adds prices when app is restarted
+        if (!masterItems.isEmpty() && w_priceString.isEmpty() && a_priceString.isEmpty()){
+            for(int i = 0; i < masterItems.size(); i++){
+                try {
+                    makeStringReq(masterItems.get(i));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View view, final int position, long id) {
                 String selectedItem = ((TextView) view).getText().toString();
