@@ -82,16 +82,19 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter = null;
     ArrayAdapter<Double> adapter2 = null;
     ArrayAdapter<String> adapter3 = null;
+    ArrayAdapter<String> adapter4 = null;
 
     ListView lv = null;
     ListView lv2 = null;
     ListView lv3 = null;
+    ListView lv4 = null;
 
     ArrayList<String> masterItems = new ArrayList<String>();
     ArrayList<Double> w_prices = new ArrayList<Double>();
     ArrayList<String> w_priceString = new ArrayList<>();
     ArrayList<String> w_priceStringTmp = new ArrayList<>();
     ArrayList<Double> a_prices = new ArrayList<Double>();
+    ArrayList<String> a_priceString = new ArrayList<String>();
     ArrayList<Float> WalmartPrices = new ArrayList<Float>();
     ArrayList<Float> TargetPrices = new ArrayList<Float>();
     ArrayList<Float> bestPrices = new ArrayList<Float>();
@@ -102,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
     //String priceNum = null;
     Double PRICE = 0.00;
     Double TOTAL = 0.00;
+
+    Double PRICE2 = 0.00;
+    Double TOTAL2 = 0.00;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -150,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, masterItems);
         adapter2 = new ArrayAdapter<Double>(this, android.R.layout.simple_list_item_1, w_prices);
         adapter3 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, w_priceString);
+        adapter4 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, a_priceString);
+
 
         lv = (ListView) findViewById(R.id.listView);
         lv.setAdapter(adapter);
@@ -157,6 +165,8 @@ public class MainActivity extends AppCompatActivity {
         //lv2.setAdapter(adapter2);
         lv3 = (ListView) findViewById(R.id.wPrice);
         lv3.setAdapter(adapter3);
+        lv4 = (ListView) findViewById(R.id.aPrice);
+        lv4.setAdapter(adapter4);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View view, final int position, long id) {
@@ -292,9 +302,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onClose() {
                 System.out.println("Closed search..");
+
                 adapter3.clear();
                 adapter.clear();
                 for (int i = 0; i < w_priceStringTmp.size(); i++){
+
                     adapter3.add(w_priceStringTmp.get(i));
                     adapter.add(masterItems.get(i));
                 }
@@ -335,6 +347,8 @@ public class MainActivity extends AppCompatActivity {
                     // adds item user wishes to add to masterItems
                     //masterItems.add(preferredCase(input.getText().toString()) + " $" + priceNum);
                     masterItems.add(preferredCase(input.getText().toString()));
+                    a_prices.add(2.5);
+                    a_priceString.add("2.5");
                     NumberFormat f = new DecimalFormat("#0.00");
                     System.out.println("User wants: " + input.getText().toString());
                     try {
@@ -349,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
                     lv.setAdapter(adapter);
                     //lv2.setAdapter(adapter2);
                     lv3.setAdapter(adapter3);
+                    lv4.setAdapter(adapter4);
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -372,10 +387,13 @@ public class MainActivity extends AppCompatActivity {
                     masterItems.clear();
                     w_prices.clear();
                     w_priceString.clear();
+                    a_prices.clear();
+                    a_priceString.clear();
                     storeArrayVal(masterItems, getApplicationContext());
                     lv.setAdapter(adapter);
                     //lv2.setAdapter(adapter2);
                     lv3.setAdapter(adapter3);
+                    lv4.setAdapter(adapter4);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -395,9 +413,14 @@ public class MainActivity extends AppCompatActivity {
             w_prices.add(TOTAL);
             NumberFormat f = new DecimalFormat("#0.00");
             w_priceString.add(f.format(TOTAL));
+
+            a_prices.add(TOTAL2);
+            a_priceString.add(f.format(TOTAL2));
+
             lv.setAdapter(adapter);
             // Aaron
             lv3.setAdapter(adapter3);
+            lv4.setAdapter(adapter4);
         }
 
         return super.onOptionsItemSelected(item);
@@ -434,11 +457,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 masterItems.remove(position);
                 w_prices.remove(position);
+                a_prices.remove(position);
+                w_priceString.remove(position);
+                a_priceString.remove(position);
                 //Collections.sort(masterItems);
                 storeArrayVal(masterItems, getApplicationContext());
                 lv.setAdapter(adapter);
                 //lv2.setAdapter(adapter2);
                 lv3.setAdapter(adapter3);
+                lv4.setAdapter(adapter4);
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -454,6 +481,9 @@ public class MainActivity extends AppCompatActivity {
     public void getTotal(){
         for(int i = 0; i < w_prices.size(); i++){
             TOTAL += w_prices.get(i);
+        }
+        for(int j = 0; j < a_prices.size(); j++){
+            TOTAL2 += a_prices.get(j);
         }
     }
 //ToDO: Long hold for menu option
