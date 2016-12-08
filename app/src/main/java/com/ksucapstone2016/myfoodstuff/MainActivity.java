@@ -414,7 +414,9 @@ public class MainActivity extends AppCompatActivity{
         for(int i = 0; i < w_prices.size(); i++){
             TOTAL += w_prices.get(i);
         }
-        for(int j = 0; j < a_prices.size(); j++){
+        for(int j = 0; j < a_priceString.size(); j++){
+            PRICE2 = Double.parseDouble(a_priceString.get(j));
+            a_prices.add(PRICE2);
             TOTAL2 += a_prices.get(j);
         }
     }

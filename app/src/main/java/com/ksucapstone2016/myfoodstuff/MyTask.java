@@ -108,7 +108,12 @@ public class MyTask extends AsyncTask <Void, Integer, String> {
         int cents = Integer.parseInt(toReturn.replaceAll("[\\D]", ""));
 
         // combine into one string
-        toReturn = dollar + "." + cents;
+        if (cents == 0){
+            toReturn = dollar + "." + cents + "0";
+        }
+        else {
+            toReturn = dollar + "." + cents;
+        }
         return toReturn;
     }
 }
