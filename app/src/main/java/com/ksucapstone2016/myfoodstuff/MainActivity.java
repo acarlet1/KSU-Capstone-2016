@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity{
         // Show loading message
         showProgressDialog();
         StringRequest strReq = new StringRequest(Method.GET,
-                "http://api.walmartlabs.com/v1/search?apiKey=52pcepcteuhhwx7gtg5z7dbe&query="
+                "http://api.walmartlabs.com/v1/search?apiKey=**addAPIkeyHere&query="
                         + ans, new Response.Listener<String>() {
 
             @Override
